@@ -15,4 +15,4 @@ class UserRating(db.Model):
     category = db.Column(db.Enum(RatingCategories))
     value = db.Column(db.Integer, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'),nullable=False)
-    from_user_id = db.Column(db.Integer, db.ForeignKey('users.id'),nullable=False)
+    from_user_id = db.Column(db.Integer,nullable=False)

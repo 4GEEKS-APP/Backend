@@ -3,6 +3,7 @@ from flask import Flask, render_template
 from flask_migrate import Migrate
 from database import db
 from routes.user_bp import user_bp
+from routes.event_bp import event_bp
 from config import Config
 
 
@@ -12,7 +13,9 @@ app.config.from_object(Config)
 db.init_app(app)
 Migrate(app, db)
 
+
 app.register_blueprint(user_bp, url_prefix='/users')
+app.register_blueprint(event_bp, url_prefix='/events')
 
 
 if __name__ == '__main__':

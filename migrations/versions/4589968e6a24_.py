@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: a39356c57d6f
+Revision ID: 4589968e6a24
 Revises: 
-Create Date: 2021-09-27 17:07:08.193705
+Create Date: 2021-09-28 17:57:13.241602
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'a39356c57d6f'
+revision = '4589968e6a24'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -27,14 +27,6 @@ def upgrade():
     sa.Column('description', sa.String(length=150), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_table('event_ratings',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('created_at', sa.DateTime(), nullable=True),
-    sa.Column('updated_at', sa.DateTime(), nullable=True),
-    sa.Column('deleted_at', sa.DateTime(), nullable=True),
-    sa.Column('category', sa.Enum('one', 'two', 'three', name='ratingcategories'), nullable=True),
-    sa.PrimaryKeyConstraint('id')
-    )
     op.create_table('user_roles',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=True),
@@ -42,20 +34,6 @@ def upgrade():
     sa.Column('deleted_at', sa.DateTime(), nullable=True),
     sa.Column('title', sa.String(length=120), nullable=True),
     sa.Column('description', sa.String(length=120), nullable=True),
-    sa.PrimaryKeyConstraint('id')
-    )
-    op.create_table('events',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('created_at', sa.DateTime(), nullable=True),
-    sa.Column('updated_at', sa.DateTime(), nullable=True),
-    sa.Column('deleted_at', sa.DateTime(), nullable=True),
-    sa.Column('title', sa.String(length=120), nullable=True),
-    sa.Column('description', sa.String(length=120), nullable=True),
-    sa.Column('rating_id', sa.Integer(), nullable=True),
-    sa.Column('latitude', sa.Float(), nullable=True),
-    sa.Column('longitude', sa.Float(), nullable=True),
-    sa.Column('address', sa.String(length=200), nullable=True),
-    sa.ForeignKeyConstraint(['rating_id'], ['event_ratings.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('users',
@@ -70,23 +48,26 @@ def upgrade():
     sa.ForeignKeyConstraint(['role_id'], ['user_roles.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_table('event_participants',
-    sa.Column('user_id', sa.Integer(), nullable=False),
-    sa.Column('event_id', sa.Integer(), nullable=False),
-    sa.ForeignKeyConstraint(['event_id'], ['events.id'], ),
-    sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
-    sa.PrimaryKeyConstraint('user_id', 'event_id')
-    )
-    op.create_table('user_followers',
+    op.create_table('events',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=True),
     sa.Column('updated_at', sa.DateTime(), nullable=True),
     sa.Column('deleted_at', sa.DateTime(), nullable=True),
+    sa.Column('creator_id', sa.Integer(), nullable=True),
+    sa.Column('title', sa.String(length=120), nullable=True),
+    sa.Column('description', sa.String(length=120), nullable=True),
+    sa.Column('latitude', sa.Float(), nullable=True),
+    sa.Column('longitude', sa.Float(), nullable=True),
+    sa.Column('address', sa.String(length=200), nullable=True),
+    sa.ForeignKeyConstraint(['creator_id'], ['users.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_table('user_followers',
     sa.Column('user_id', sa.Integer(), nullable=False),
     sa.Column('follower_id', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['follower_id'], ['users.id'], ),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
-    sa.PrimaryKeyConstraint('id')
+    sa.PrimaryKeyConstraint('user_id', 'follower_id')
     )
     op.create_table('user_preferences',
     sa.Column('user_id', sa.Integer(), nullable=False),
@@ -104,22 +85,58 @@ def upgrade():
     sa.Column('value', sa.Integer(), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=False),
     sa.Column('from_user_id', sa.Integer(), nullable=False),
-    sa.ForeignKeyConstraint(['from_user_id'], ['users.id'], ),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id')
+    )
+    op.create_table('event_images',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('created_at', sa.DateTime(), nullable=True),
+    sa.Column('updated_at', sa.DateTime(), nullable=True),
+    sa.Column('deleted_at', sa.DateTime(), nullable=True),
+    sa.Column('url', sa.String(length=350), nullable=True),
+    sa.Column('event_id', sa.Integer(), nullable=False),
+    sa.ForeignKeyConstraint(['event_id'], ['events.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_table('event_participants',
+    sa.Column('user_id', sa.Integer(), nullable=False),
+    sa.Column('event_id', sa.Integer(), nullable=False),
+    sa.ForeignKeyConstraint(['event_id'], ['events.id'], ),
+    sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
+    sa.PrimaryKeyConstraint('user_id', 'event_id')
+    )
+    op.create_table('event_ratings',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('created_at', sa.DateTime(), nullable=True),
+    sa.Column('category', sa.Enum('one', 'two', 'three', name='ratingcategories'), nullable=False),
+    sa.Column('event_id', sa.Integer(), nullable=False),
+    sa.Column('value', sa.Integer(), nullable=False),
+    sa.Column('user_id', sa.Integer(), nullable=False),
+    sa.ForeignKeyConstraint(['event_id'], ['events.id'], ),
+    sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_table('user_events_favorites',
+    sa.Column('user_id', sa.Integer(), nullable=False),
+    sa.Column('event_id', sa.Integer(), nullable=False),
+    sa.ForeignKeyConstraint(['event_id'], ['events.id'], ),
+    sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
+    sa.PrimaryKeyConstraint('user_id', 'event_id')
     )
     # ### end Alembic commands ###
 
 
 def downgrade():
     # ### commands auto generated by Alembic - please adjust! ###
+    op.drop_table('user_events_favorites')
+    op.drop_table('event_ratings')
+    op.drop_table('event_participants')
+    op.drop_table('event_images')
     op.drop_table('user_ratings')
     op.drop_table('user_preferences')
     op.drop_table('user_followers')
-    op.drop_table('event_participants')
-    op.drop_table('users')
     op.drop_table('events')
+    op.drop_table('users')
     op.drop_table('user_roles')
-    op.drop_table('event_ratings')
     op.drop_table('categories')
     # ### end Alembic commands ###
