@@ -56,3 +56,21 @@ def updateEvent(event_id):
     return 'Update an event'
 def deleteEvent(event_id):
     return 'Delete an event'
+#Desde aqui#
+def uploadImg(event_id):
+    event = Event.query.get(event_id)
+    if event == None:
+         return jsonify({'message':'No existe el evento'})
+
+         data = request.get_json()
+
+         if data['img_url'] == None:
+             return jsonify({'massage':'Fail'}),400
+
+         img = EventImage()
+         img.event_id = event_id
+         img.img_url = data['img_url']
+
+         img.save()
+
+         return jsonify({'message':'Success', 'event':event, 'event_img': img})
