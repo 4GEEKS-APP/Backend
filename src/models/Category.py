@@ -1,4 +1,4 @@
-from database import db
+from src.database import db
 
 class Category(db.Model):
     __tablename__ = 'categories'
@@ -6,5 +6,5 @@ class Category(db.Model):
     created_at = db.Column(db.DateTime)
     updated_at = db.Column(db.DateTime)
     deleted_at = db.Column(db.DateTime, nullable=True)
-    title = db.Column(db.String(120))
-    description = db.Column(db.String(150))
+    title = db.Column(db.String(120), nullable=False)
+    description = db.Column(db.String(150), nullable=False)

@@ -1,20 +1,21 @@
 import enum
-import datetime
-from database import db
+from src.database import db
 from sqlalchemy.dialects.mysql import JSON
 
-class RatingCategories(enum.Enum):
+class RatingRange(enum.Enum):
+    zero = 0
     one = 1
     two = 2
     three = 3
+    four = 4
+    five = 5
 
 class EventRating(db.Model):
     __tablename__ = 'event_ratings'
     id = db.Column(db.Integer, primary_key=True)
     created_at = db.Column(db.DateTime)
-    category = db.Column(db.Enum(RatingCategories), nullable=False)
+    value = db.Column(db.Enum(RatingRange), nullable=False)
     event_id = db.Column(db.Integer, db.ForeignKey('events.id'),nullable=False)
-    value = db.Column(db.Integer, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'),nullable=False)
 
     def serialize(self):

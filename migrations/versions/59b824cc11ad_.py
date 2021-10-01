@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 4589968e6a24
+Revision ID: 59b824cc11ad
 Revises: 
-Create Date: 2021-09-28 17:57:13.241602
+Create Date: 2021-10-01 16:56:13.787470
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '4589968e6a24'
+revision = '59b824cc11ad'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -23,16 +23,14 @@ def upgrade():
     sa.Column('created_at', sa.DateTime(), nullable=True),
     sa.Column('updated_at', sa.DateTime(), nullable=True),
     sa.Column('deleted_at', sa.DateTime(), nullable=True),
-    sa.Column('title', sa.String(length=120), nullable=True),
-    sa.Column('description', sa.String(length=150), nullable=True),
+    sa.Column('title', sa.String(length=120), nullable=False),
+    sa.Column('description', sa.String(length=150), nullable=False),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('user_roles',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=True),
-    sa.Column('updated_at', sa.DateTime(), nullable=True),
-    sa.Column('deleted_at', sa.DateTime(), nullable=True),
-    sa.Column('title', sa.String(length=120), nullable=True),
+    sa.Column('title', sa.String(length=120), nullable=False),
     sa.Column('description', sa.String(length=120), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
@@ -42,8 +40,9 @@ def upgrade():
     sa.Column('updated_at', sa.DateTime(), nullable=True),
     sa.Column('deleted_at', sa.DateTime(), nullable=True),
     sa.Column('full_name', sa.String(length=120), nullable=False),
-    sa.Column('email', sa.String(length=120), nullable=True),
-    sa.Column('password', sa.String(length=120), nullable=True),
+    sa.Column('email', sa.String(length=120), nullable=False),
+    sa.Column('password', sa.String(length=120), nullable=False),
+    sa.Column('avatar_url', sa.String(length=400), nullable=True),
     sa.Column('role_id', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['role_id'], ['user_roles.id'], ),
     sa.PrimaryKeyConstraint('id')
@@ -53,12 +52,19 @@ def upgrade():
     sa.Column('created_at', sa.DateTime(), nullable=True),
     sa.Column('updated_at', sa.DateTime(), nullable=True),
     sa.Column('deleted_at', sa.DateTime(), nullable=True),
-    sa.Column('creator_id', sa.Integer(), nullable=True),
-    sa.Column('title', sa.String(length=120), nullable=True),
-    sa.Column('description', sa.String(length=120), nullable=True),
+    sa.Column('creator_id', sa.Integer(), nullable=False),
+    sa.Column('category_id', sa.Integer(), nullable=False),
+    sa.Column('date_start', sa.DateTime(), nullable=False),
+    sa.Column('title', sa.String(length=120), nullable=False),
+    sa.Column('description', sa.String(length=120), nullable=False),
     sa.Column('latitude', sa.Float(), nullable=True),
     sa.Column('longitude', sa.Float(), nullable=True),
     sa.Column('address', sa.String(length=200), nullable=True),
+    sa.Column('gender', sa.String(length=200), nullable=False),
+    sa.Column('level', sa.String(length=200), nullable=False),
+    sa.Column('max_members', sa.Integer(), nullable=False),
+    sa.Column('thumbnail', sa.String(length=350), nullable=False),
+    sa.ForeignKeyConstraint(['category_id'], ['categories.id'], ),
     sa.ForeignKeyConstraint(['creator_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
@@ -81,8 +87,7 @@ def upgrade():
     sa.Column('created_at', sa.DateTime(), nullable=True),
     sa.Column('updated_at', sa.DateTime(), nullable=True),
     sa.Column('deleted_at', sa.DateTime(), nullable=True),
-    sa.Column('category', sa.Enum('one', 'two', 'three', name='ratingcategories'), nullable=True),
-    sa.Column('value', sa.Integer(), nullable=False),
+    sa.Column('value', sa.Enum('zero', 'one', 'two', 'three', 'four', 'five', name='ratingrange'), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=False),
     sa.Column('from_user_id', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
@@ -93,7 +98,7 @@ def upgrade():
     sa.Column('created_at', sa.DateTime(), nullable=True),
     sa.Column('updated_at', sa.DateTime(), nullable=True),
     sa.Column('deleted_at', sa.DateTime(), nullable=True),
-    sa.Column('url', sa.String(length=350), nullable=True),
+    sa.Column('url', sa.String(length=350), nullable=False),
     sa.Column('event_id', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['event_id'], ['events.id'], ),
     sa.PrimaryKeyConstraint('id')
@@ -108,9 +113,8 @@ def upgrade():
     op.create_table('event_ratings',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=True),
-    sa.Column('category', sa.Enum('one', 'two', 'three', name='ratingcategories'), nullable=False),
+    sa.Column('value', sa.Enum('zero', 'one', 'two', 'three', 'four', 'five', name='ratingrange'), nullable=False),
     sa.Column('event_id', sa.Integer(), nullable=False),
-    sa.Column('value', sa.Integer(), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['event_id'], ['events.id'], ),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),

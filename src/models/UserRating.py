@@ -1,10 +1,13 @@
 import enum
-from database import db
+from src.database import db
 
-class RatingCategories(enum.Enum):
+class RatingRange(enum.Enum):
+    zero = 0
     one = 1
     two = 2
     three = 3
+    four = 4
+    five = 5
 
 class UserRating(db.Model):
     __tablename__ = 'user_ratings'
@@ -12,7 +15,6 @@ class UserRating(db.Model):
     created_at = db.Column(db.DateTime)
     updated_at = db.Column(db.DateTime)
     deleted_at = db.Column(db.DateTime)
-    category = db.Column(db.Enum(RatingCategories))
-    value = db.Column(db.Integer, nullable=False)
+    value = db.Column(db.Enum(RatingRange), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'),nullable=False)
     from_user_id = db.Column(db.Integer,nullable=False)
