@@ -4,14 +4,14 @@ from flask_migrate import Migrate
 from src.database import db
 from src.routes.user_bp import user_bp
 from src.routes.event_bp import event_bp
-from src.config import DevConfig
+from src.config import DevConfig, ProdConfig
 from flask_jwt_extended import JWTManager
 from flask_cors import CORS
 
 
 app = Flask(__name__)
 app.url_map.slashes = False
-app.config.from_object(DevConfig)
+app.config.from_object(ProdConfig)
 db.init_app(app)
 Migrate(app, db)
 jwt = JWTManager(app)
