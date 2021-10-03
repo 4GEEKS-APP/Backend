@@ -8,6 +8,7 @@ from flask_jwt_extended import get_jwt_identity
 from flask_jwt_extended import jwt_required
 import datetime
 
+
 @jwt_required()
 def allEvents():
     events = Event.query.all()
@@ -40,8 +41,8 @@ def createEvent():
     event.creator_id = current_user_id
     user = User.query.get(current_user_id)
     event.participants.append(user)
-    event.created_at = datetime.utcnow()
-    event.updated_at = datetime.utcnow()
+    event.created_at = datetime.date.today()
+    event.updated_at = datetime.date.today()
     event.save()
 
     return jsonify(event.serialize())
@@ -160,8 +161,8 @@ def postComment(event_id):
     data = request.get_json()
     current_user_id = get_jwt_identity()
     comment = EventComment(
-        created_at = datetime.datetime.utcnow(),
-        updated_at = datetime.datetime.utcnow(),
+        created_at = datetime.utcnow(),
+        updated_at = datetime.utcnow(),
         user_id = current_user_id,
         event_id = event.id,
         body = data['body']     
