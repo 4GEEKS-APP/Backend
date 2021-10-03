@@ -1,14 +1,22 @@
 import sys
 from flask import request, jsonify
-from src.models.User import User
-from src.models.Event import Event
-from src.models.EventRating import EventRating
+from models.EventComment import EventComment
+from models.User import User
+from models.Event import Event
+from models.EventRating import EventRating
 from datetime import datetime
 from flask_jwt_extended import get_jwt_identity
 from flask_jwt_extended import jwt_required
+import datetime
 
 @jwt_required()
 def allEvents():
+    events = Event.query.all()
+    serialized = list(map(lambda e: e.simple(),events))
+    return jsonify(serialized)
+
+@jwt_required()
+def allEventsDetailed():
     events = Event.query.all()
     serialized = list(map(lambda e: e.serialize(),events))
     return jsonify(serialized)
@@ -23,8 +31,14 @@ def createEvent():
     event = Event()
     event.title = data['title']
     event.description = data['description']
+    event.gender = data['gender']
+    event.level = data['level']
+    event.max_members = data['max_members']
+    event.thumbnail = data['thumbnail']
+    event.category_id = data['category_id']
+    event.date_start = data['date_start']
     current_user_id = get_jwt_identity()
-    event.creator = current_user_id
+    event.creator_id = current_user_id
     user = User.query.get(current_user_id)
     event.participants.append(user)
     event.created_at = datetime.utcnow()
@@ -138,4 +152,22 @@ def removeFromFavorites(event_id):
     favorites = list(map(lambda event: event.simple(), user.favorites))
     return jsonify({'message':'Success. Event was removed from favorites list.', 'favorites': favorites})
 
+@jwt_required()
+def postComment(event_id):
+    event = Event.query.get(event_id)
+    if event == None:
+        return jsonify({'message':'There is not event with provided id'})
+    
+    data = request.get_json()
+    current_user_id = get_jwt_identity()
+    comment = EventComment(
+        created_at = datetime.datetime.utcnow(),
+        updated_at = datetime.datetime.utcnow(),
+        user_id = current_user_id,
+        event_id = event.id,
+        body = data['body']     
+    )
 
+    comment.save()
+    return jsonify({'message':'Success'})
+    

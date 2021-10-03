@@ -1,5 +1,5 @@
 from flask import Blueprint
-from src.controllers.UserController import index, register, show, update, follow, unfollow, login, admin_register, tokenDecode
+from controllers.UserController import index, register, show, update, follow, unfollow, login, admin_register, tokenDecode
 from flask_jwt_extended import jwt_required
 
 user_bp = Blueprint('user_bp', __name__)

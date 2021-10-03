@@ -1,5 +1,5 @@
 import enum
-from src.database import db
+from database import db
 from sqlalchemy.dialects.mysql import JSON
 
 class RatingRange(enum.Enum):

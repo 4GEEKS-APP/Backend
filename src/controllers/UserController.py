@@ -1,11 +1,11 @@
 import sys
 from flask import request
-from src.models.User import User
+from models.User import User
 from flask import jsonify
 from flask_jwt_extended import create_access_token,get_jwt_identity
 from flask_bcrypt import generate_password_hash, check_password_hash
 import datetime
-from src.models.UserRole import UserRole
+from models.UserRole import UserRole
 from flask_jwt_extended import jwt_required
 
 

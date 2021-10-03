@@ -1,16 +1,17 @@
 """empty message
 
-Revision ID: 59b824cc11ad
+Revision ID: 4ee01b321ebc
 Revises: 
-Create Date: 2021-10-01 16:56:13.787470
+Create Date: 2021-10-01 20:48:30.191792
 
 """
 from alembic import op
 import sqlalchemy as sa
+import datetime
 
 
 # revision identifiers, used by Alembic.
-revision = '59b824cc11ad'
+revision = '4ee01b321ebc'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -27,13 +28,21 @@ def upgrade():
     sa.Column('description', sa.String(length=150), nullable=False),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_table('user_roles',
+    user_roles = op.create_table('user_roles',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=True),
     sa.Column('title', sa.String(length=120), nullable=False),
     sa.Column('description', sa.String(length=120), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
+
+    op.bulk_insert(user_roles,
+    [
+       {'title': 'Admin', 'description': 'Admin role', 'created_at': datetime.datetime.utcnow()},
+       {'title': 'User', 'description': 'User role', 'created_at': datetime.datetime.utcnow()}
+    ]
+    )
+
     op.create_table('users',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=True),
@@ -43,6 +52,7 @@ def upgrade():
     sa.Column('email', sa.String(length=120), nullable=False),
     sa.Column('password', sa.String(length=120), nullable=False),
     sa.Column('avatar_url', sa.String(length=400), nullable=True),
+    sa.Column('gender', sa.String(length=120), nullable=False),
     sa.Column('role_id', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['role_id'], ['user_roles.id'], ),
     sa.PrimaryKeyConstraint('id')
@@ -93,6 +103,16 @@ def upgrade():
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
+    op.create_table('event_comments',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('created_at', sa.DateTime(), nullable=True),
+    sa.Column('updated_at', sa.DateTime(), nullable=True),
+    sa.Column('deleted_at', sa.DateTime(), nullable=True),
+    sa.Column('body', sa.String(length=350), nullable=False),
+    sa.Column('event_id', sa.Integer(), nullable=False),
+    sa.ForeignKeyConstraint(['event_id'], ['events.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
     op.create_table('event_images',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=True),
@@ -136,6 +156,7 @@ def downgrade():
     op.drop_table('event_ratings')
     op.drop_table('event_participants')
     op.drop_table('event_images')
+    op.drop_table('event_comments')
     op.drop_table('user_ratings')
     op.drop_table('user_preferences')
     op.drop_table('user_followers')

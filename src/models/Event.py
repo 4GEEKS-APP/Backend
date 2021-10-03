@@ -1,7 +1,8 @@
-from src.database import db
-from src.models.EventRating import EventRating
-from src.models.EventImage import EventImage
-from src.models.pivot_tables import event_participants
+from database import db
+from models.EventRating import EventRating
+from models.EventImage import EventImage
+from models.EventComment import EventComment
+from models.pivot_tables import event_participants
 from sqlalchemy.dialects.mysql import JSON
 
 class Event(db.Model):
@@ -25,8 +26,10 @@ class Event(db.Model):
 
     ratings = db.relationship('EventRating', backref='event_ratings', lazy=True)
     images = db.relationship('EventImage', backref='event_images', lazy=True)
+    comments = db.relationship('EventComment', backref='event_comments', lazy=True)
     participants = db.relationship('User', secondary=event_participants)
-    
+
+
     def serialize(self):
         return {
             'id': self.id,
@@ -36,7 +39,13 @@ class Event(db.Model):
             'description': self.description,
             'creator_id': self.creator_id,
             'images': list(map(lambda image: image.serialize(), self.images)),
-            'participants': list(map(lambda user: user.simple(), self.participants))
+            'participants': list(map(lambda user: user.simple(), self.participants)),
+            'comments': list(map(lambda comment: comment.serialize(), self.comments)),
+            'max_members': self.max_members,
+            'thumbnail': self.thumbnail,
+            'level': self.level,
+            'gender': self.gender,
+            'category': self.category.serialize()
         }
     def simple(self):
         return {
@@ -45,7 +54,12 @@ class Event(db.Model):
             'title': self.title,
             'description': self.description,
             'creator_id': self.creator_id,
-            'participants': list(map(lambda user: user.simple(), self.participants))
+            'participants': list(map(lambda user: user.tiny(), self.participants)),
+            'max_members': self.max_members,
+            'thumbnail': self.thumbnail,
+            'level': self.level,
+            'gender': self.gender,
+            'category': self.category.serialize()
         }
     def save(self):
         db.session.add(self)

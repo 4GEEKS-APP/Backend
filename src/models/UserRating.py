@@ -1,5 +1,5 @@
 import enum
-from src.database import db
+from database import db
 
 class RatingRange(enum.Enum):
     zero = 0

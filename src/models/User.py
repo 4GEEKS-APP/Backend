@@ -1,7 +1,7 @@
-from src.models.UserRole import UserRole
-from src.models.UserRating import UserRating
-from src.models.pivot_tables import user_preferences, user_followers, user_events_favorites
-from src.database import db
+from models.UserRole import UserRole
+from models.UserRating import UserRating
+from models.pivot_tables import user_preferences, user_followers, user_events_favorites
+from database import db
 from flask import jsonify
 
 class User(db.Model):
@@ -28,6 +28,8 @@ class User(db.Model):
                             primaryjoin=id==user_followers.c.follower_id,
                             secondaryjoin=id==user_followers.c.user_id,backref="user_following")
 
+    comments = db.relationship('EventComment', backref='user', lazy=True)
+
     def serialize(self):
         return {
             'id': self.id,
@@ -47,6 +49,12 @@ class User(db.Model):
             'email': self.email,
             'avatar_url': self.avatar_url,
             'gender': self.gender,
+        }
+    def tiny(self):
+        return {
+            'id': self.id,
+            'full_name': self.full_name,
+            'avatar_url': self.avatar_url,
         }
     def save(self):
         db.session.add(self)
