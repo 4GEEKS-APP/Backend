@@ -6,8 +6,8 @@ from src.models.Event import Event
 from src.models.EventRating import EventRating
 from flask_jwt_extended import get_jwt_identity
 from flask_jwt_extended import jwt_required
+from src.models.Category import Category
 import datetime
-
 
 @jwt_required()
 def allEvents():
@@ -41,11 +41,17 @@ def createEvent():
     event.creator_id = current_user_id
     user = User.query.get(current_user_id)
     event.participants.append(user)
-    event.created_at = datetime.date.today()
-    event.updated_at = datetime.date.today()
+    event.created_at = datetime.datetime.utcnow()
+    event.updated_at = datetime.datetime.utcnow()
     event.save()
 
-    return jsonify(event.serialize())
+    return jsonify(event.simple())
+@jwt_required()
+def getEventCategories():
+    categories = Category.query.all()
+    parsed = list(map(lambda c: c.serialize(), categories))
+
+    return jsonify(parsed)
 
 @jwt_required()
 def getById(event_id):
@@ -161,8 +167,8 @@ def postComment(event_id):
     data = request.get_json()
     current_user_id = get_jwt_identity()
     comment = EventComment(
-        created_at = datetime.utcnow(),
-        updated_at = datetime.utcnow(),
+        created_at = datetime.datetime.utcnow(),
+        updated_at = datetime.datetime.utcnow(),
         user_id = current_user_id,
         event_id = event.id,
         body = data['body']     
