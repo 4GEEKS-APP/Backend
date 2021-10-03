@@ -16,7 +16,7 @@ class Config:
 class DevConfig(Config):
 
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://root:root@localhost:5432/4geeks_app'
+    SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://gwdfupqnufenzn:455fd768658c9af84671a7139ec3a81d920213dd9d2e9ce7e1067a51255896c1@ec2-100-24-169-249.compute-1.amazonaws.com:5432/d1o0u95058scop'
     ENV = 'development'
 
 class ProdConfig(Config):
