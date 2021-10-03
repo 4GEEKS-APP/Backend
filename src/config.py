@@ -22,5 +22,5 @@ class DevConfig(Config):
 class ProdConfig(Config):
 
     DEBUG = False
-    SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://dituydduiddtko:2ab223e8d8342f5f1043b73fecf99cf51ba230d4ded250423d98940296f31b6d@ec2-34-199-209-37.compute-1.amazonaws.com:5432/d51vgatsd8peb8'
+    SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://gwdfupqnufenzn:455fd768658c9af84671a7139ec3a81d920213dd9d2e9ce7e1067a51255896c1@ec2-100-24-169-249.compute-1.amazonaws.com:5432/d1o0u95058scop'
     ENV = 'production'

@@ -11,7 +11,7 @@ from flask_cors import CORS
 
 app = Flask(__name__)
 app.url_map.slashes = False
-app.config.from_object(DevConfig)
+app.config.from_object(ProdConfig)
 db.init_app(app)
 Migrate(app, db)
 jwt = JWTManager(app)
