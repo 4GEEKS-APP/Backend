@@ -1,4 +1,4 @@
-from database import db
+from src.database import db
 
 class EventImage(db.Model):
     __tablename__ = 'event_images'

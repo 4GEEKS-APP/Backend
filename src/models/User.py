@@ -1,7 +1,7 @@
-from models.UserRole import UserRole
-from models.UserRating import UserRating
-from models.pivot_tables import user_preferences, user_followers, user_events_favorites
-from database import db
+from src.models.UserRole import UserRole
+from src.models.UserRating import UserRating
+from src.models.pivot_tables import user_preferences, user_followers, user_events_favorites
+from src.database import db
 from flask import jsonify
 
 class User(db.Model):

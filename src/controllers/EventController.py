@@ -1,10 +1,9 @@
 import sys
 from flask import request, jsonify
-from models.EventComment import EventComment
-from models.User import User
-from models.Event import Event
-from models.EventRating import EventRating
-from datetime import datetime
+from src.models.EventComment import EventComment
+from src.models.User import User
+from src.models.Event import Event
+from src.models.EventRating import EventRating
 from flask_jwt_extended import get_jwt_identity
 from flask_jwt_extended import jwt_required
 import datetime

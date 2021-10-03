@@ -1,8 +1,8 @@
-from database import db
-from models.EventRating import EventRating
-from models.EventImage import EventImage
-from models.EventComment import EventComment
-from models.pivot_tables import event_participants
+from src.database import db
+from src.models.EventRating import EventRating
+from src.models.EventImage import EventImage
+from src.models.EventComment import EventComment
+from src.models.pivot_tables import event_participants
 from sqlalchemy.dialects.mysql import JSON
 
 class Event(db.Model):

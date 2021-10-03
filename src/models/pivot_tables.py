@@ -1,5 +1,5 @@
-from database import db
-from models.Category import Category
+from src.database import db
+from src.models.Category import Category
 
 user_preferences = db.Table('user_preferences',
     db.Column('user_id', db.Integer, db.ForeignKey('users.id'), primary_key=True),

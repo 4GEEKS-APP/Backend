@@ -1,10 +1,10 @@
 from logging import DEBUG
 from flask import Flask, render_template
 from flask_migrate import Migrate
-from database import db
-from routes.user_bp import user_bp
-from routes.event_bp import event_bp
-from config import DevConfig, ProdConfig, DevConfig
+from src.database import db
+from src.routes.user_bp import user_bp
+from src.routes.event_bp import event_bp
+from src.config import DevConfig, ProdConfig, DevConfig
 from flask_jwt_extended import JWTManager
 from flask_cors import CORS
 
