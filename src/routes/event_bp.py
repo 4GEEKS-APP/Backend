@@ -4,7 +4,7 @@ from flask_jwt_extended import jwt_required
 
 event_bp = Blueprint('event_bp', __name__)
 
-event_bp.route('/all', methods=['GET'])(allEvents)
+event_bp.route('/', methods=['GET'])(allEvents)
 event_bp.route('/categories', methods=['GET'])(getEventCategories)
 event_bp.route('/detailed', methods=['GET'])(allEventsDetailed)
 event_bp.route('/create', methods=['POST'])(createEvent)
