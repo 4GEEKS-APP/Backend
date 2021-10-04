@@ -7,6 +7,7 @@ from flask_bcrypt import generate_password_hash, check_password_hash
 import datetime
 from src.models.UserRole import UserRole
 from flask_jwt_extended import jwt_required
+from datetime import timedelta
 
 
 def login():
@@ -16,7 +17,8 @@ def login():
         return jsonify({'message':'Unauthorized, bad credentials.'}),401
     
     if check_password_hash(user.password, request_data['password']):
-        acces_token = create_access_token(identity=user.id)
+        expires = timedelta(days=1)
+        acces_token = create_access_token(identity=user.id, expires_delta=expires)
         return jsonify({'message': 'Login succes!', 'user': user.serialize(), 'token': acces_token})
     else:
         return jsonify({'message':'Unauthorized, bad credentials.'}),401
