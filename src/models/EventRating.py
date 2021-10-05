@@ -21,7 +21,6 @@ class EventRating(db.Model):
     def serialize(self):
         return {
             'id': self.id,
-            'created_at': self.created_at,
             'user_id': self.user_id,
             'event_id': self.event_id,
             'value': self.value

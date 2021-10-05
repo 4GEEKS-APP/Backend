@@ -1,5 +1,7 @@
+from operator import truediv
 from src.models.UserRole import UserRole
 from src.models.UserRating import UserRating
+from src.models.Event import Event
 from src.models.pivot_tables import user_preferences, user_followers, user_events_favorites
 from src.database import db
 from flask import jsonify
@@ -27,6 +29,7 @@ class User(db.Model):
                             secondary=user_followers,
                             primaryjoin=id==user_followers.c.follower_id,
                             secondaryjoin=id==user_followers.c.user_id,backref="user_following")
+    events = db.relationship('Event', backref='user_events', lazy=True)
 
     comments = db.relationship('EventComment', backref='user', lazy=True)
 
@@ -41,6 +44,7 @@ class User(db.Model):
             'gender': self.gender,
             'role_id': self.role_id,
             'favorites': list(map(lambda event: event.simple(), self.favorites)),
+            'events': list(map(lambda event: event.tiny(), self.events)),
         }
     def simple(self):
         return {

@@ -61,6 +61,17 @@ class Event(db.Model):
             'gender': self.gender,
             'category': self.category.serialize()
         }
+    def tiny(self):
+        return {
+            'id': self.id,
+            'title': self.title,
+            'description': self.description,
+            'thumbnail': self.thumbnail,
+            'level': self.level,
+            'gender': self.gender,
+            'category': self.category.serialize(),
+            'ratings': list(map(lambda rating: rating.serialize(), self.ratings)),
+        }
     def save(self):
         db.session.add(self)
         db.session.commit()
