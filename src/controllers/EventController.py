@@ -120,8 +120,8 @@ def removeParticipant(event_id):
 
     current_user_id = get_jwt_identity()
     if event.creator_id == current_user_id:
-        # TODO: Replace with passed id
-        participant = User.query.get(5)
+        data = request.get_json()
+        participant = User.query.get(data['user_id'])
         event.participants.remove(participant)
         event.save()
         return jsonify({'message':'Success. The user was removed from the event.', 'event': event.serialize()})
@@ -133,11 +133,15 @@ def addToFavorites(event_id):
         return jsonify({'message':'There is not event with provided id.'})
     current_user_id = get_jwt_identity()
     user = User.query.get(current_user_id)
-    user.favorites.append(event)
-    user.save()
 
-    favorites = list(map(lambda event: event.simple(), user.favorites))
-    return jsonify({'message':'Success. The event was added to favorites list.', 'favorites': favorites})
+    is_in_favorites = list(filter(lambda e: event == e, user.favorites))
+    if len(is_in_favorites) > 0:
+        return jsonify({'message':'The event is already in favorites list'})
+    if len(is_in_favorites) == 0:
+        user.favorites.append(event)
+        user.save()
+        favorites = list(map(lambda event: event.simple(), user.favorites))
+        return jsonify({'message':'Success. The event was added to favorites list.', 'favorites': favorites})
 
 @jwt_required()
 def removeFromFavorites(event_id):
