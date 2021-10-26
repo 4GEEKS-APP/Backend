@@ -23,17 +23,14 @@ def login():
     else:
         return jsonify({'message':'Unauthorized, bad credentials.'}),401
 
-
 def index():
     users = User.query.all()
     serialized = list(map(lambda u: u.serialize(), users))
     return jsonify({'message':'Success', 'users': serialized})
 
-
 def tokenDecode():
     current_user_id = get_jwt_identity()
     return jsonify(user_id=current_user_id), 200
-
 
 def register():
     request_data = request.get_json()
@@ -44,6 +41,8 @@ def register():
     user = User.query.filter_by(email = request_data['email']).first()
     if user is not None:
         return jsonify({'message':'The email provided is already associated with another account'}),400
+
+        
     roleUser = UserRole.query.filter_by(title='User').first()
     serialized = roleUser.serialize()
     newUser = User()
