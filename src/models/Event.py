@@ -45,7 +45,10 @@ class Event(db.Model):
             'thumbnail': self.thumbnail,
             'level': self.level,
             'gender': self.gender,
-            'category': self.category.serialize()
+            'category': self.category.serialize(),
+            'latitude': self.latitude,
+            'longitude': self.longitude,
+            'address': self.address
         }
     def simple(self):
         return {
@@ -59,7 +62,10 @@ class Event(db.Model):
             'thumbnail': self.thumbnail,
             'level': self.level,
             'gender': self.gender,
-            'category': self.category.serialize()
+            'category': self.category.serialize(),
+            'latitude': self.latitude,
+            'longitude': self.longitude,
+            'address': self.address
         }
     def tiny(self):
         return {

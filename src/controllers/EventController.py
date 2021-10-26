@@ -46,6 +46,7 @@ def createEvent():
     event.save()
 
     return jsonify(event.simple())
+
 @jwt_required()
 def getEventCategories():
     categories = Category.query.all()
