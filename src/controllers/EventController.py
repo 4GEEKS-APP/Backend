@@ -37,6 +37,9 @@ def createEvent():
     event.thumbnail = data['thumbnail']
     event.category_id = data['category_id']
     event.date_start = data['date_start']
+    event.address = data['address']
+    event.latitude = data['latitude']
+    event.longitude = data['longitude']
     current_user_id = get_jwt_identity()
     event.creator_id = current_user_id
     user = User.query.get(current_user_id)
