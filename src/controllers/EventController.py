@@ -189,10 +189,12 @@ def postComment(event_id):
 @jwt_required()
 def addEventMedia(event_id):
     event = Event.query.get(event_id)
-    if event == None:
-        return jsonify({'message':'There is not event with provided id'})
-    
     data = request.get_json()
+    if event == None:
+        return jsonify({'message':'There is not event with provided id'}),400
+    if data['url'] == None:
+        return jsonify({'message':'Error. You must provide the image url'}),400
+    
     image = EventImage(
         created_at = datetime.datetime.utcnow(),
         updated_at = datetime.datetime.utcnow(),
