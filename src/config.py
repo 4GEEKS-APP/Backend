@@ -16,11 +16,11 @@ class Config:
 class DevConfig(Config):
 
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://gwdfupqnufenzn:455fd768658c9af84671a7139ec3a81d920213dd9d2e9ce7e1067a51255896c1@ec2-100-24-169-249.compute-1.amazonaws.com:5432/d1o0u95058scop'
+    SQLALCHEMY_DATABASE_URI = 'postgres://oonxjewfaaypft:9788124e93c50d4ed715556650c86e1ccb0c8b2458445473a2f2c0bc15709ce7@ec2-44-196-96-149.compute-1.amazonaws.com:5432/ddd7sqjbmkab0b'
     ENV = 'development'
 
 class ProdConfig(Config):
 
     DEBUG = False
-    SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://gwdfupqnufenzn:455fd768658c9af84671a7139ec3a81d920213dd9d2e9ce7e1067a51255896c1@ec2-100-24-169-249.compute-1.amazonaws.com:5432/d1o0u95058scop'
+    SQLALCHEMY_DATABASE_URI = 'postgres://oonxjewfaaypft:9788124e93c50d4ed715556650c86e1ccb0c8b2458445473a2f2c0bc15709ce7@ec2-44-196-96-149.compute-1.amazonaws.com:5432/ddd7sqjbmkab0b'
     ENV = 'production'
