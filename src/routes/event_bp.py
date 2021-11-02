@@ -1,5 +1,5 @@
 from flask import Blueprint
-from src.controllers.EventController import allEvents, createEvent, getById,deleteEvent,rateEvent, joinToEvent,unjoinToEvent,removeParticipant, addToFavorites, removeFromFavorites, postComment, getEventCategories, allEventsDetailed
+from src.controllers.EventController import allEvents, createEvent, getById,deleteEvent,rateEvent, joinToEvent,unjoinToEvent,removeParticipant, addToFavorites, removeFromFavorites, postComment, getEventCategories, allEventsDetailed, addEventMedia
 from flask_jwt_extended import jwt_required
 
 event_bp = Blueprint('event_bp', __name__)
@@ -17,6 +17,7 @@ event_bp.route('/<int:event_id>/participant', methods=['DELETE'])(unjoinToEvent)
 event_bp.route('/<int:event_id>/favorite', methods=['POST'])(addToFavorites)
 event_bp.route('/<int:event_id>/favorite', methods=['DELETE'])(removeFromFavorites)
 event_bp.route('/<int:event_id>/comment', methods=['POST'])(postComment)
+event_bp.route('/<int:event_id>/media', methods=['POST'])(addEventMedia)
 
 
 

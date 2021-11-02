@@ -1,6 +1,7 @@
 import sys
 from flask import request, jsonify
 from src.models.EventComment import EventComment
+from src.models.EventImage import EventImage
 from src.models.User import User
 from src.models.Event import Event
 from src.models.EventRating import EventRating
@@ -184,4 +185,21 @@ def postComment(event_id):
 
     comment.save()
     return jsonify({'message':'Success'})
+
+@jwt_required()
+def addEventMedia(event_id):
+    event = Event.query.get(event_id)
+    if event == None:
+        return jsonify({'message':'There is not event with provided id'})
+    
+    data = request.get_json()
+    image = EventImage(
+        created_at = datetime.datetime.utcnow(),
+        updated_at = datetime.datetime.utcnow(),
+        event_id = event.id,
+        url = data['url']     
+    )
+    image.save()
+    return jsonify(event.serialize()),200
+    
     
