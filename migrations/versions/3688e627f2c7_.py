@@ -1,17 +1,16 @@
 """empty message
 
-Revision ID: 4ee01b321ebc
+Revision ID: 3688e627f2c7
 Revises: 
-Create Date: 2021-10-01 20:48:30.191792
+Create Date: 2021-11-02 21:16:35.664953
 
 """
 from alembic import op
 import sqlalchemy as sa
-import datetime
 
 
 # revision identifiers, used by Alembic.
-revision = '4ee01b321ebc'
+revision = '3688e627f2c7'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -28,21 +27,13 @@ def upgrade():
     sa.Column('description', sa.String(length=150), nullable=False),
     sa.PrimaryKeyConstraint('id')
     )
-    user_roles = op.create_table('user_roles',
+    op.create_table('user_roles',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=True),
     sa.Column('title', sa.String(length=120), nullable=False),
     sa.Column('description', sa.String(length=120), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
-
-    op.bulk_insert(user_roles,
-    [
-       {'title': 'Admin', 'description': 'Admin role', 'created_at': datetime.datetime.utcnow()},
-       {'title': 'User', 'description': 'User role', 'created_at': datetime.datetime.utcnow()}
-    ]
-    )
-
     op.create_table('users',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=True),
@@ -110,7 +101,9 @@ def upgrade():
     sa.Column('deleted_at', sa.DateTime(), nullable=True),
     sa.Column('body', sa.String(length=350), nullable=False),
     sa.Column('event_id', sa.Integer(), nullable=False),
+    sa.Column('user_id', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['event_id'], ['events.id'], ),
+    sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('event_images',
