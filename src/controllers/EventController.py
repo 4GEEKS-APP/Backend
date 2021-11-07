@@ -92,6 +92,7 @@ def updateEvent(event_id):
 @jwt_required()
 def deleteEvent(event_id):
     return 'Delete an event'
+<<<<<<< HEAD
 
 @jwt_required()
 def joinToEvent(event_id):
@@ -205,3 +206,23 @@ def addEventMedia(event_id):
     return jsonify(event.serialize()),200
     
     
+=======
+#Desde aqui#
+def uploadImg(event_id):
+    event = Event.query.get(event_id)
+    if event == None:
+         return jsonify({'message':'No existe el evento'})
+
+         data = request.get_json()
+
+         if data['img_url'] == None:
+             return jsonify({'massage':'Fail'}),400
+
+         img = EventImage()
+         img.event_id = event_id
+         img.img_url = data['img_url']
+
+         img.save()
+
+         return jsonify({'message':'Success', 'event':event, 'event_img': img})
+>>>>>>> 2ee1fa37dca97e9e854274d4e0df6094a036c226

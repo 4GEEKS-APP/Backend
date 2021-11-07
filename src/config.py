@@ -4,10 +4,14 @@ class Config:
     JWT_SECRET_KEY = 'Shhhhhhhhhh!'
     DEBUG = True
     # Connect to the database
+<<<<<<< HEAD
     #SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://asiz33:yonosoydelau1@localhost/4geeks_app_v2'
 
     # SQLALCHEMY_DATABASE_URI = 'postgres+psycopg2://root:root@localhost:5432/4geeks_app_v2'
 
+=======
+    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:root@localhost:8889/back'
+>>>>>>> 2ee1fa37dca97e9e854274d4e0df6094a036c226
     # Turn off the Flask-SQLAlchemy event system and warning
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
